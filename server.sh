@@ -26,14 +26,14 @@ export CUDA_VISIBLE_DEVICES="${LLAMA_GPU:-0}"
 export LLAMA_ARG_PORT="${LLAMA_PORT:-7600}"
 export LLAMA_ARG_HOST="${LLAMA_HOST:-0.0.0.0}"
 
-LLAMA_TEMP="${LLAMA_TEMP:-0.7}"
-LLAMA_TOP_P="${LLAMA_TOP_P:-0.80}"
-LLAMA_TOP_K="${LLAMA_TOP_K:-20}"
-LLAMA_MIN_P="${LLAMA_MIN_P:-0.0}"
-LLAMA_PRESENCE_PENALTY="${LLAMA_PRESENCE_PENALTY:-1.5}"
-LLAMA_REPEAT_PENALTY="${LLAMA_REPEAT_PENALTY:-1.0}"
-LLAMA_CTX_SIZE="${LLAMA_CTX_SIZE:-32768}"
-LLAMA_REASONING="${LLAMA_REASONING:-off}"
+#LLAMA_TEMP="${LLAMA_TEMP:-0.7}"
+#LLAMA_TOP_P="${LLAMA_TOP_P:-0.80}"
+#LLAMA_TOP_K="${LLAMA_TOP_K:-20}"
+#LLAMA_MIN_P="${LLAMA_MIN_P:-0.0}"
+#LLAMA_PRESENCE_PENALTY="${LLAMA_PRESENCE_PENALTY:-1.5}"
+#LLAMA_REPEAT_PENALTY="${LLAMA_REPEAT_PENALTY:-1.0}"
+#LLAMA_CTX_SIZE="${LLAMA_CTX_SIZE:-32768}"
+#LLAMA_REASONING="${LLAMA_REASONING:-off}"
 
 LLAMA_SERVER_BIN="/root/llama.cpp/build/bin/llama-server"
 if [ ! -f "$LLAMA_SERVER_BIN" ]; then
@@ -42,19 +42,25 @@ fi
 
 #nohup sh -c '
 "$LLAMA_SERVER_BIN" \
-    --model unsloth/Qwen3.8-27B-GGUF/Qwen3.8-27B-UD-Q4_K_XL.gguf \
-    --mmproj unsloth/Qwen3.8-27B-GGUF/mmproj-F16.gguf \
-    --model "/root/unsloth/${LLAMA_MODEL}/${LLAMA_MODEL_FILE}" \
-    --mmproj "/root/unsloth/${LLAMA_MODEL}/mmproj-F16.gguf" \
-     --temp "$LLAMA_TEMP" \
-    --top-p "$LLAMA_TOP_P" \
-    --top-k "$LLAMA_TOP_K" \
-    --min-p "$LLAMA_MIN_P" \
-    --presence-penalty "$LLAMA_PRESENCE_PENALTY" \
-    --repeat-penalty "$LLAMA_REPEAT_PENALTY" \
-    --ctx-size "$LLAMA_CTX_SIZE" \
-    --reasoning "$LLAMA_REASONING" \
-    --n-gpu-layers 999 \
+  -m /root/unsloth/Qwen3.8-27B-GGUF/Qwen3.8-27B-UD-Q4_K_XL.gguf \
+  --mmproj /root/unsloth/Qwen3.8-27B-GGUF/mmproj-F16.gguf \
+  -ngl 999 \
+  -c 32768 \
+  -np 1 \
+  -b 2048 \
+  -ub 1024 \
+  -fa on \
+  -ctk q8_0 \
+  -ctv q8_0 \
+  -t 8 \
+  --temp 0.7 \
+  --top-p 0.80 \
+  --top-k 20 \
+  --min-p 0.0 \
+  --presence-penalty 1.2 \
+  --repeat-penalty 1.0 \
+  --reasoning-effort low \
+  --jinja
     2>&1 | multilog t s5000000 n3 "$LOGFILE" &
 #' >/dev/null 2>&1 &
 
