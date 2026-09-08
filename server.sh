@@ -43,9 +43,10 @@ fi
 #nohup sh -c '
 "$LLAMA_SERVER_BIN" \
   -m /root/unsloth/Qwen3.8-27B-GGUF/Qwen3.8-27B-UD-Q4_K_XL.gguf \
+  -md /root/unsloth/Qwen3.8-27B-GGUF/mtp-Qwen3.8-27B-Q4_0.gguf \
   --mmproj /root/unsloth/Qwen3.8-27B-GGUF/mmproj-F16.gguf \
   -ngl 999 \
-  -c 32768 \
+  -c 150000 \
   -np 1 \
   -b 2048 \
   -ub 1024 \
@@ -59,9 +60,9 @@ fi
   --min-p 0.0 \
   --presence-penalty 1.2 \
   --repeat-penalty 1.0 \
-  --reasoning-effort low \
-  --jinja
-    2>&1 | multilog t s5000000 n3 "$LOGFILE" &
+  --reasoning off \
+  --jinja \
+   2>&1 | multilog t s5000000 n3 "$LOGFILE" &
 #' >/dev/null 2>&1 &
 
 #echo "Server started. Checking log for GPU offload:"
