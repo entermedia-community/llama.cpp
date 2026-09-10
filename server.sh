@@ -47,6 +47,7 @@ fi
   --mmproj /root/unsloth/Qwen3.8-27B-GGUF/mmproj-F16.gguf \
   -ngl 999 \
   -c 150000 \
+  -n 16384 \
   -np 1 \
   -b 2048 \
   -ub 1024 \
@@ -57,11 +58,11 @@ fi
   --temp 0.7 \
   --top-p 0.80 \
   --top-k 20 \
-  --min-p 0.0 \
-  --presence-penalty 1.2 \
-  --repeat-penalty 1.0 \
+  --min-p 0.05 \
+  --presence-penalty 0.0 \
+  --repeat-penalty 1.05 \
   --reasoning off \
-  --jinja \
+  --jinja
    2>&1 | multilog t s5000000 n3 "$LOGFILE" &
 #' >/dev/null 2>&1 &
 
