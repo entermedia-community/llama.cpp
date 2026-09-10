@@ -62,7 +62,7 @@ fi
   --presence-penalty 0.0 \
   --repeat-penalty 1.05 \
   --reasoning off \
-  --jinja
+  --jinja \
    2>&1 | multilog t s5000000 n3 "$LOGFILE" &
 #' >/dev/null 2>&1 &
 
