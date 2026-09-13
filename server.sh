@@ -16,7 +16,7 @@ elif [ -f "$(dirname "$0")/.env" ]; then
 fi
 
 # Kill any existing llama-server processes and free up ports 8080 and 7600
-pkill llama-server || true
+pkill -9 -t tty llama-server || true
 lsof -ti :8080,7600 | xargs -r kill -9 2>/dev/null || true
 
 LOGFILE=/root/logs/llama
@@ -52,6 +52,7 @@ fi
   -b 2048 \
   -ub 1024 \
   -fa on \
+  --timeout 300 \
   -ctk q8_0 \
   -ctv q8_0 \
   -t 8 \
@@ -66,6 +67,8 @@ fi
   --jinja \
    2>&1 | multilog t s5000000 n3 "$LOGFILE" &
 #' >/dev/null 2>&1 &
+
+ #mkdir -p /root/logs/gost83 && gost -L tcp://:8384/:7600 2>&1 | multilog t s500000 n3 /root/logs/gost83 &
 
 #echo "Server started. Checking log for GPU offload:"
 #sleep 2
