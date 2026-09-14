@@ -63,7 +63,7 @@ fi
   --presence-penalty 0.0 \
   --repeat-penalty 1.05 \
   --reasoning auto \
-  --reasoning-budget 4096 \
+  --reasoning-budget 1024 \
   --jinja \
    2>&1 | multilog t s5000000 n3 "$LOGFILE" &
 #' >/dev/null 2>&1 &
