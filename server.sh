@@ -46,7 +46,7 @@ fi
   -md /root/unsloth/Qwen3.8-27B-GGUF/mtp-Qwen3.8-27B-Q4_0.gguf \
   --mmproj /root/unsloth/Qwen3.8-27B-GGUF/mmproj-F16.gguf \
   -ngl 999 \
-  -c 131072 \
+  -c 163840 \
   -n 16384 \
   -np 2 \
   -b 2048 \
