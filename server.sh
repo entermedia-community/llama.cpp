@@ -40,6 +40,11 @@ if [ ! -f "$LLAMA_SERVER_BIN" ]; then
     LLAMA_SERVER_BIN="/root/llama.cpp/llama-server"
 fi
 
+API_KEY_ARG=""
+if [ -n "${LLAMA_KEY:-}" ]; then
+    API_KEY_ARG="--api-key $LLAMA_KEY"
+fi
+
 #nohup sh -c '
 "$LLAMA_SERVER_BIN" \
   -m /root/unsloth/Qwen3.8-27B-GGUF/Qwen3.8-27B-UD-Q4_K_XL.gguf \
@@ -65,6 +70,7 @@ fi
   --reasoning auto \
   --reasoning-budget 1024 \
   --jinja \
+  $API_KEY_ARG \
    2>&1 | multilog t s5000000 n3 "$LOGFILE" &
 #' >/dev/null 2>&1 &
 
