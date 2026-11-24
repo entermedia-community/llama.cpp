@@ -15,12 +15,27 @@ elif [ -f "$(dirname "$0")/.env" ]; then
     set +a
 fi
 
-# Kill any existing llama-server processes and free up ports 8080 and 7600
+# 1. Kill any existing llama-server processes and free up ports 8080 and 7600
 pkill -9 -t tty llama-server || true
 lsof -ti :8080,7600 | xargs -r kill -9 2>/dev/null || true
 
 LOGFILE=/root/logs/llama
 mkdir -p "$LOGFILE"
+
+# 2. Gracefully stop multilog so it flushes buffers and releases /root/logs/llama/lock
+pkill -TERM -f "multilog.*$LOGFILE" 2>/dev/null || true
+
+# 3. Wait up to 3 seconds for old processes and locks to exit
+for i in {1..30}; do
+  if ! pgrep -f "multilog.*$LOGFILE" >/dev/null && ! pgrep -f "llama-server" >/dev/null; then
+    break
+  fi
+  sleep 0.1
+done
+
+# 4. Force-kill only if still stuck after 3 seconds
+pkill -9 -f "multilog.*$LOGFILE" 2>/dev/null || true
+
 
 export CUDA_VISIBLE_DEVICES="${LLAMA_GPU:-0}"
 export LLAMA_ARG_PORT="${LLAMA_PORT:-7600}"
