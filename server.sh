@@ -67,8 +67,9 @@ fi
   --min-p 0.05 \
   --presence-penalty 0.0 \
   --repeat-penalty 1.05 \
-  --reasoning "low" \
+  --reasoning auto \
   --reasoning-budget 1024 \
+  --chat-template-kwargs '{"reasoning_effort": "medium"}' \
   --jinja \
   $API_KEY_ARG \
    2>&1 | multilog t s5000000 n3 "$LOGFILE" &
