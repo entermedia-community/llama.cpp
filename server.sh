@@ -67,7 +67,7 @@ fi
   --min-p 0.05 \
   --presence-penalty 0.0 \
   --repeat-penalty 1.05 \
-  --reasoning auto \
+  --reasoning low \
   --reasoning-budget 1024 \
   --jinja \
   $API_KEY_ARG \
